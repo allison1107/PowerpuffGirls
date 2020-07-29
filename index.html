@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拯救小鎮村?!!!</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap');
+        @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+
+        body {
+
+            margin: 0;
+
+            font-size: 14px;
+            background-attachment: fixed;
+            color: white;
+        }
+
+
+        * {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-family: 'cwTeXYen', sans-serif;
+            font-weight: normal;
+        }
+
+        #main {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            position: relative;
+            background-image: linear-gradient(to bottom, #a8edea 0%, #fed6e3 100%);
+
+        }
+
+        #mycanvas {
+            margin: auto;
+            /* margin-top: 20px; */
+        }
+
+
+        #gameover {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+
+        }
+
+        #gameover div {
+            display: flex;
+            margin: auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #gameover h1 {
+
+            margin: auto;
+            color: white;
+        }
+
+        #logo {
+            height: 50px;
+            margin-bottom: 0px;
+        }
+
+        #content>h2 {
+            margin: auto;
+        }
+
+        h2 span {
+            color: rgb(241, 84, 97);
+        }
+
+        #content {
+            margin: auto;
+            /* padding: 50px; */
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        #aboutInner h1 {
+            color: #F471B4;
+            font-size: 36px;
+            font-weight: bold;
+
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .btn input {
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 10px;
+            font-size: 20px;
+        }
+
+        .btn input:hover {
+            transform: scale(1.1);
+            transition-duration: 0.1s;
+            transition-timing-function: ease-out;
+            color: rgb(65, 65, 65);
+        }
+
+        .btn input:nth-of-type(1) {
+            background-color: rgb(184, 189, 252);
+            cursor: pointer;
+        }
+
+        .btn input:nth-of-type(2) {
+            background-color: rgb(252, 184, 184);
+            cursor: pointer;
+        }
+
+        .btn input:nth-of-type(3) {
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        #about {
+            margin: auto;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            position: fixed;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        #aboutInner {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #gameover img {
+            height: 300px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        #content span {
+            text-align: end;
+            font-size: 18px;
+            color: black;
+        }
+
+        .blood {
+            width: 50%;
+            height: 1rem;
+            /* border: 2px solid rgb(172, 172, 172); */
+            background-color: rgb(211, 211, 211);
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+
+        #jojoBlood {
+            margin-right: auto;
+        }
+
+
+        #jojoBlood_per {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(134, 164, 204);
+            border-radius: 20px;
+        }
+
+        #bottom {
+            display: flex;
+            align-items: center;
+        }
+
+        #bottom span {
+            margin-right: auto;
+        }
+
+        #bubbleBlood_per {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(238, 168, 189);
+            border-radius: 20px;
+        }
+
+        #reload {
+            background-color: rgb(137, 184, 223);
+        }
+
+        .bright {
+            animation-name: bloodAni;
+            animation-duration: 10s;
+        }
+
+        @keyframes bloodAni {
+            0% {
+                filter: brightness(5);
+            }
+
+            100% {
+                filter: brightness(1);
+            }
+        }
+
+
+        /* 說明圖 */
+        #gameInfo {
+            height: 320px;
+            margin: auto;
+            border-radius: 5px;
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="main">
+        <div id="gameover">
+            <div>
+                <img src="" alt="">
+                <h1> </h1>
+                <h2> </h2>
+                <div class="btn btn02">
+                    <input id="reload" type="button" value="再來一場(R)">
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div id="about">
+            <div id="aboutInner">
+                <div style="display:inline-flex; margin: auto;"><img id="logo" src="./img/LOGO.png" alt="">
+                    <h1>拯救小鎮村?!!!</h1>
+                </div>
+                <h2 id="gameInfoTitle">
+                    ➔ 按鍵操作：<br>
+                    <img id="gameInfo" src="./img/gameInfo.png" alt=""><br>
+                    ➔ 血量歸零的一方算輸<br>
+                    ➔ "與電腦對戰"只能控制泡泡，以擊敗啾啾的時間作紀錄<br>
+                </h2>
+                <div class="btn">
+                    <h2>請先選擇模式再開始：</h2>
+                    <input id="normal" class="mode" type="button" value="2P一般模式(Q)">
+                    <input id="fast" class="mode" type="button" value="2P急速模式(W)">
+                    <input id="AI" class="mode" type="button" value="與電腦對戰(E)">
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+
+            <div id="jojoBlood" class="blood">
+                <div id="jojoBlood_per"></div>
+            </div>
+
+            <canvas id="mycanvas" width="600" height="600">
+            </canvas>
+
+            <div id="bottom">
+                <span id="Check_Txt">紀錄時間：<span id="Check_i">0分0秒</span></span>
+                <div id="bubbeBlood" class="blood">
+                    <div id="bubbleBlood_per"></div>
+
+                </div>
+
+            </div>
+            <img src="./img/C.svg" alt="" id="characterA" style="display: none;">
+            <img src="./img/D.svg" alt="" id="characterB" style="display: none;">
+            <img src="./img/E.svg" alt="" id="characterC" style="display: none;">
+            <img src="./img/bg.jpg" alt="" id="BG" style="display: none;">
+        </div>
+
+    </div>
+
+
+    <audio id="audioB" src="./sound/Bubble.mp3"></audio>
+    <audio id="audioJ" src="./sound/jojo.mp3"></audio>
+    <audio id="audioM" src="./sound/momo.mp3"></audio>
+    <audio id="audioV" src="./sound/victory.mp3"></audio>
+    <audio id="audioG" src="./sound/gameover.mp3"></audio>
+    <audio id="audioV02" src="./sound/victory_02.mp3"></audio>
+
+</body>
+
+
+
+
+
+<script>
+
+    // 計時器
+    var setTime = false;
+    // 音效
+    var Sound = {
+        soundBubble: () => {
+            var audioBubble = document.getElementById("audioB");
+            if (game == 1) {
+                audioBubble.play();    //播放
+            }
+
+        },
+        soundjojo: () => {
+            var audiojojo = document.getElementById("audioJ");
+            if (game == 1) {
+                audiojojo.play();    //播放
+            }
+
+        },
+        soundmomo: () => {
+            var audiomomo = document.getElementById("audioM");
+            if (game == 1) {
+                audiomomo.play();    //播放
+            }
+
+        },
+        soundVictory: () => {
+            var audioVic = document.getElementById("audioV");
+            audioVic.play();    //播放
+
+
+        },
+        soundOver: () => {
+            var audioOver = document.getElementById("audioG");
+            audioOver.play();    //播放
+
+
+        },
+        soundVictory_AI: () => {
+            var audioV_AI = document.getElementById("audioV02");
+            audioV02.play();    //播放
+
+
+        },
+
+
+    }
+
+
+
+
+
+    $("#gameover").hide();
+    var AI = false;
+
+
+
+    // 角色A初始
+    cA = {
+        width: 70,
+        height: 85,
+        x: 200 - 35
+    };
+
+    // 角色B初始
+    cB = {
+        width: 60,
+        height: 90,
+        x: 200 - 30
+    };
+
+    var c = document.getElementById("mycanvas");
+    var ctx = c.getContext("2d");
+    var cA_y = mycanvas.height - cA.height;  //cA起始
+    var cB_y = 0;  //cB起始
+
+
+    function init() {
+        ctx.drawImage(BG, 0, 0, mycanvas.width, mycanvas.height);
+        ctx.drawImage(characterA, cA.x, cA_y, cA.width, cA.height);
+        ctx.drawImage(characterB, cB.x, cB_y, cB.width, cB.height);
+        ctx.drawImage(characterC, ball.x, ball.y, ball.r, ball.r);
+
+    }
+
+
+    ballArray_A = [];
+    ballX_A = [];
+    ballY_A = [];
+    ballArray_B = [];
+    ballX_B = [];
+    ballY_B = [];
+
+
+
+
+    // 遊戲結束
+    var gameFinish = {
+        bubbleWin: () => {
+            clearInterval(gameLoop);
+            clearInterval(mm);
+            if (AI == false) {
+                $("#gameover").show();
+                $("#gameover h1").text("一天又平安的過去了，感謝飛天小女警的努力");
+                $("#gameover img").attr("src", "./img/gameOver_B.jpg");
+                Sound.soundVictory()
+            } else if (AI == true) {
+                $("#gameover h1").text(`紀錄時間 ${$("#Check_i").text()}`);
+                $("#gameover img").attr("src", "./img/gameOver_C.jpg");
+                Sound.soundVictory_AI();
+            }
+            $("#gameover").show();
+            game = 0;
+
+
+
+        },
+
+
+        jojoWin: () => {
+            clearInterval(gameLoop);
+            clearInterval(mm);
+            $("#gameover h1").text("壞人們獲勝了!!");
+            $("#gameover img").attr("src", "./img/gameOver_A.jpg");
+            $("#gameover").show();
+            game = 0;
+            if (AI == false) {
+                Sound.soundVictory();
+            } else { Sound.soundOver(); }
+
+
+
+
+        }
+    }
+
+
+
+    // 判定範圍
+    var R = 15;
+
+    // 判定角色移動初始
+    var CharacterAMove = "NONE";
+    var CharacterBMove = "NONE";
+    var jojoBlood = 100;
+    var bubbleBlood = 100;
+    // 泡泡
+    var Bubble = {
+
+        createBall: function (x) {
+            this.x = x;
+            this.y = cA_y;
+            this.vx = 2;
+            this.vy = 3;
+            this.r = 5;
+        },
+
+
+        // 把新球+到陣列
+        pushArray_A: () => {
+            ballArray_A.push(
+                new Bubble.createBall(cA.x + (cA.width / 2), cA_y));
+            ballArray_A.push(
+                new Bubble.createBall(cA.x + (cA.width / 2) + 120, cA_y));
+            ballArray_A.push(
+                new Bubble.createBall(cA.x + (cA.width / 2) - 120, cA_y));
+        },
+
+
+        // 逐一取出並執行方法
+        mapArray_A: () => {
+            ballArray_A.map(function (e) {
+
+                e.y = e.y - e.vy;
+                if (e.y < 0) { ballArray_A.splice(ballArray_A.indexOf(e), 1) }
+                // console.log(ballArray_A);
+
+                ballY_A.splice(ballArray_A.indexOf(e), ballArray_A.length, e.y)
+                ballX_A.splice(ballArray_A.indexOf(e), ballArray_A.length, e.x)
+                ctx.beginPath()
+                ctx.arc(e.x, e.y, e.r, 0, 2 * Math.PI);
+
+
+                if (ballArray_A.indexOf(e) % 3 == 0) {
+                    ctx.fillStyle = "#ffe347";
+
+                } else if (ballArray_A.indexOf(e) % 2 == 0) {
+                    ctx.fillStyle = "#f27e87";
+                } else {
+                    ctx.fillStyle = "#A7CF6E";
+                }
+
+
+                ctx.strokeStyle = "#5097C3";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 2;
+
+
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+
+            })
+        },
+
+        // 泡泡贏了
+        gameOver_A: () => {
+
+            var i;
+            ballY_A.map(function (e) {
+
+                // 判斷Y小於80的
+                if (e < cB.height && e > 0) {
+                    var A = ballX_A[ballY_A.indexOf(e)];
+                    var B = ballX_A[ballY_A.indexOf(e) + 1];
+                    var C = ballX_A[ballY_A.indexOf(e) + 2];
+
+                    // JOJO扣血
+                    if (A - 5 <= cB.x - R + cB.width && A + 5 >= cB.x + R
+                        || B - 5 <= cB.x - R + cB.width && B + 5 >= cB.x + R
+                        || C - 5 <= cB.x - R + cB.width && C + 5 >= cB.x + R) {
+                        if (jojoBlood >= 0) {
+
+                            jojoBlood = jojoBlood - 0.09;
+                            $("#jojoBlood_per").css({
+                                "width": `${jojoBlood}%`
+
+                            })
+                            $("#characterB").attr({ "src": "./img/D_02.svg" })
+                            setTimeout(function () {
+                                $("#characterB").attr({ "src": "./img/D.svg" })
+                            }, 250)
+
+
+                        } else {
+                            gameFinish.bubbleWin();
+                        }
+
+
+
+                        // console.log(jojoBlood);
+                    }
+                }
+
+                if (e < 0) {
+                    for (i = 0; i <= ballY_A.indexOf(e); i++) {
+                        ballX_A.splice(i, 1, "");
+                        // console.log(ballY_A);
+                    }
+                    ballY_A.splice(ballY_A.indexOf(e), 1, "");
+                }
+            })
+
+
+
+            if (ball.x + ball.r >= cB.x + R && ball.x <= cB.x + cB.width - R
+                && ball.y <= cB.height - R) {
+                if (jojoBlood >= 0) {
+                    jojoBlood = jojoBlood - 0.2;
+                    $("#jojoBlood_per").css({
+                        "width": `${jojoBlood}%`
+                    })
+                    $("#characterB").attr({ "src": "./img/D_02.svg" })
+                    setTimeout(function () {
+                        $("#characterB").attr({ "src": "./img/D.svg" })
+                    }, 250)
+                } else {
+                    gameFinish.bubbleWin();
+                }
+            }
+        },
+
+        // 泡泡移動
+        moveCharacterA: () => {
+            // 偵測滑鼠移動以及超過
+
+            if (keyDownA_array[0] == true) {
+                if (cA.x >= mycanvas.width - cA.width) {
+                    cA.x = mycanvas.width - cA.width;
+                } else {
+                    cA.x += 3;
+                    // console.log(keyDownA_array)
+                }
+            }
+
+            if (keyDownA_array[1] == true) {
+                if (cA.x <= 0) {
+                    cA.x = 0;
+                } else {
+                    cA.x -= 3;
+                    // console.log(keyDownA_array)
+
+                }
+            }
+
+
+        }
+
+    }
+
+    // 啾啾
+    var Buttercup = {
+
+        createBall: function (x) {
+            this.x = x;
+            this.y = cB_y;
+            this.vx = 2;
+            this.vy = 3;
+            this.r = 15;
+        },
+
+
+        // 把新球+到陣列
+        pushArray_B: () => {
+            ballArray_B.push(new Buttercup.createBall(cB.x + (cB.width / 2), cB_y + cB.height))
+        },
+
+
+        // 逐一取出並執行方法
+        mapArray_B: () => {
+            ballArray_B.map(function (e) {
+                if (AI == true) {
+                    e.r = Math.floor(Math.random() * 5 + 1) + 15;
+                }
+                if (e.y > mycanvas.height) {
+                    ballArray_B.splice(ballArray_B.indexOf(e), 1)
+                }
+
+                // e.x = e.x + e.vx*0.2;
+                e.y = e.y + e.vy;
+                ctx.beginPath()
+                ctx.arc(e.x, e.y + cB.height, e.r, 0, 2 * Math.PI);
+                ctx.fillStyle = "#B399FF";
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 2;
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ballY_B.splice(ballArray_B.indexOf(e), ballArray_B.length, e.y)
+                ballX_B.splice(ballArray_B.indexOf(e), ballArray_B.length, e.x)
+
+            })
+        },
+
+        // 魔人啾啾贏了
+        gameOver_B: () => {
+
+            var i;
+
+            ballY_B.map(function (e) {
+
+
+                if (e > mycanvas.height - cB.height * 2 + R && e < mycanvas.height - cB.height - R) {
+                    var B = ballX_B[ballY_B.indexOf(e)];
+                    if (B - 15 <= cA.x + cA.width - R && B + 15 >= cA.x + R) {
+                        if (bubbleBlood >= 0) {
+                            bubbleBlood = bubbleBlood - 1;
+                            $("#bubbleBlood_per").css({
+                                "width": `${bubbleBlood}%`
+                            })
+                            $("#characterA").attr({ "src": "./img/C_02.svg" })
+                            setTimeout(function () {
+                                $("#characterA").attr({ "src": "./img/C.svg" })
+                            }, 250)
+
+                        } else {
+                            gameFinish.jojoWin();
+
+                        }
+
+
+                    }
+                }
+
+
+
+                if (e < mycanvas.height - cB.height) {
+                    for (i = 0; i <= ballY_B.indexOf(e); i++) {
+                        ballX_B.splice(i, 1, "");
+                    }
+                    ballY_B.splice(ballY_B.indexOf(e), 1, "");
+                }
+            })
+
+            if (ball.x + ball.r >= cA.x + R && ball.x <= cA.x + cA.width - R
+                && ball.y + ball.r >= mycanvas.height - cA.height + R) {
+
+
+                if (bubbleBlood >= 0) {
+                    bubbleBlood = bubbleBlood - 0.2;
+                    $("#bubbleBlood_per").css({
+                        "width": `${bubbleBlood}%`
+                    })
+                    $("#characterA").attr({ "src": "./img/C_02.svg" })
+                    setTimeout(function () {
+                        $("#characterA").attr({ "src": "./img/C.svg" })
+                    }, 250)
+                } else {
+                    gameFinish.jojoWin();
+                }
+
+            }
+
+        },
+
+
+
+        // 角色B移動
+        moveCharacterB: () => {
+            // 偵測滑鼠移動以及超過
+            if (keyDownB_array[0] == true) {
+                if (cB.x >= mycanvas.width - cB.width) {
+                    cB.x = mycanvas.width - cB.width;
+                } else {
+                    cB.x += 3;
+
+                }
+            } else {
+                cB.x = cB.x;
+            }
+
+            if (keyDownB_array[1] == true) {
+                if (cB.x <= 0) {
+                    cB.x = 0;
+
+                } else {
+                    cB.x -= 3;
+                }
+            }
+
+        }
+
+
+
+    }
+
+
+    // 毛怪初始
+    var ball = {
+        x: 0,
+        y: 0,
+        vx: 2,
+        vy: 3,
+        r: 50
+    }
+
+    // 毛怪
+    var autoBall = {
+
+
+
+        drawBall: () => {
+
+            ball.y = ball.y + ball.vy;
+            ball.x = ball.x + ball.vx;
+            ctx.drawImage(characterC, ball.x, ball.y, ball.r, ball.r);
+        },
+
+
+        bounce: () => {
+
+            if (ball.y + ball.r >= mycanvas.height) { //hit bottom
+                ball.vy = -1 * Math.abs(ball.vy);
+                Sound.soundmomo()
+            }
+            if (ball.y <= 0) { //hit top
+                ball.vy = Math.abs(ball.vy);
+                Sound.soundmomo()
+            }
+            if (ball.x + ball.r >= mycanvas.width) { //hit right
+                ball.vx = -1 * Math.abs(ball.vx);
+                Sound.soundmomo()
+
+            }
+            if (ball.x <= 0) { //hit left
+                ball.vx = Math.abs(ball.vx);
+                Sound.soundmomo()
+            }
+        }
+
+
+    }
+
+
+    var speed
+
+    // 不同模式
+    var mode = {
+        normalMode: () => {
+            speed = 10;
+            gameLoop = setInterval(animate, speed);
+            $(".mode").attr("disabled", "disabled");
+            $("#about").hide()
+            game = 1;
+
+        },
+
+        fastMode: () => {
+            speed = 5;
+            gameLoop = setInterval(animate, speed);
+            $(".mode").attr("disabled", "disabled");
+            $("#about").hide()
+            game = 1;
+
+        },
+
+        aiMode: () => {
+            AI = true;
+            speed = 5;
+            gameLoop = setInterval(animate, speed);
+            $(".mode").attr("disabled", "disabled");
+            $("#about").hide()
+            game = 1;
+        },
+    }
+
+
+
+
+
+
+
+    // 設定動畫
+    function animate() {
+        ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+        init();
+
+        Bubble.moveCharacterA();
+        Buttercup.moveCharacterB();
+        Bubble.mapArray_A();
+        Buttercup.mapArray_B();
+        Bubble.gameOver_A();
+        Buttercup.gameOver_B();
+        autoBall.drawBall();
+        autoBall.bounce();
+
+
+    }
+
+
+    // 遊戲開始
+    var AILoop
+    var gameLoop;
+    var speed2;
+    var keyDownA_array = [false, false, false];
+    var keyDownB_array = [false, false, false];
+    var mode_array = [false, false, false];
+    // AI移動
+    var AImove = [true, false];
+    function startGame() {
+
+        $("#AI").click(() => {
+            $("#BG").attr("src", "./img/bg02.jpg")
+            $("#main").css({ "background-image": "linear-gradient(60deg, #9890e3 0%,  #b1f4cf 100%)" })
+
+
+            mode.aiMode();
+            if (AI = true) {
+                mm = window.setInterval("Check_Time()", 1000);
+                speed = 20;
+                speed2 = 1500
+
+                // 自己移動
+                setInterval(jojoMove, 100)
+
+                // 多久切換一次速度
+                setInterval(changeSpeed, 1500)
+
+                // 偵測切換速度
+                // setInterval(nowSpeed, 2000)
+                setInterval(Buttercup.pushArray_B, 250)
+                setInterval(Sound.soundjojo, 250)
+
+
+
+
+
+                function jojoMove() {
+                    var AIactive = Math.floor(Math.random() * 2);
+                    var AIactive2 = Math.floor(Math.random() * 2);
+                    keyDownB_array[AIactive2] = AImove[AIactive];
+                    // console.log(AImove[AIactive]);
+                    // CharacterBMove = AImove[AIactive];
+                }
+                function changeSpeed() {
+
+                    if (speed2 <= 300) {
+                        speed2 = 300;
+                    } else {
+                        speed2 = speed2 - 10;
+                    }
+
+                }
+
+
+            }
+
+        })
+
+
+        $("#reload").click(() => {
+            javascript: window.location.reload()
+        })
+
+
+
+        // 一般模式
+        $("#normal").click(() => {
+            mode.normalMode();
+            mm = window.setInterval("Check_Time()", 1000);
+        })
+
+        // 急速模式
+        $("#fast").click(() => {
+            mode.fastMode();
+            mm = window.setInterval("Check_Time()", 1000);
+        })
+
+
+        // 偵測鍵盤
+        // 泡泡
+        $(document).keydown(function (evt) {
+            switch (evt.keyCode) {
+                case 39:
+                    keyDownA_array[0] = true;
+                    break;
+                case 37:
+                    keyDownA_array[1] = true;
+                    break;
+                case 13:
+                    // 不能連續發射
+                    if (keyDownA_array.filter((e) => e != false) == false) {
+                        keyDownA_array[2] = true;
+                        Bubble.pushArray_A();
+                        Sound.soundBubble();
+                    }
+
+                    break;
+                case 81:
+                    if ($("#about").css("display") != "none") {
+                        $("#normal").click();
+
+                    }
+                    break;
+                case 87:
+                    if ($("#about").css("display") != "none") {
+                        $("#fast").click();
+                    }
+
+                    break;
+                case 69:
+                    if ($("#about").css("display") != "none") {
+                        $("#AI").click();
+
+
+                    }
+
+                    break;
+                case 82:
+                    if ($("#gameover").css("display") != "none") {
+                        javascript: window.location.reload()
+                    }
+                    break;
+
+
+            }
+        });
+
+        // 啾啾
+        $(document).keypress(function (evt) {
+            // console.log(evt.which)
+            switch (evt.which) {
+                case 100:
+                    if (AI != true) {
+                        keyDownB_array[0] = true;
+                    }
+                    break;
+                case 97:
+
+                    if (AI != true) {
+                        keyDownB_array[1] = true;
+                    }
+                    break;
+                case 32:
+                    if (keyDownB_array[2] == false) {
+                        keyDownB_array[2] = true;
+                        Buttercup.pushArray_B();
+                        Sound.soundjojo();
+
+                    }
+
+                    break;
+            }
+        }
+        )
+
+
+
+
+        $(document).keyup(function (evt) {
+            switch (evt.keyCode) {
+                case 39:
+                    keyDownA_array[0] = false;
+
+                    break;
+                case 37:
+                    keyDownA_array[1] = false;
+                    break;
+                case 13:
+
+                    keyDownA_array[2] = false;
+                    break;
+
+
+                case 68:
+                    keyDownB_array[0] = false;
+                    break;
+                case 65:
+                    keyDownB_array[1] = false;
+                    break;
+
+                case 32:
+                    keyDownB_array[2] = false;
+                    break;
+            }
+        });
+
+    }
+    var mm
+    startGame();
+
+
+
+    //計時器
+    var game = 0;
+    var SetMinute = 0;
+    function Check_Time() {
+        SetMinute += 1;
+        var Check_i = document.getElementById("Check_i");
+
+
+        var Cal_Minute = Math.floor(Math.floor(SetMinute % 3600) / 60);
+        var Cal_Second = SetMinute % 60;
+
+        Check_i.innerHTML = Cal_Minute + "分" + Cal_Second + "秒";
+
+    }
+
+
+
+</script>
+
+</html>
